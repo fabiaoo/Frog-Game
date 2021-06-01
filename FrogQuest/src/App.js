@@ -1,14 +1,14 @@
-import './App.css';
-import Botoes from './components/botoes.js'
+import Menu from './components/Menu/index.js';
+import Rotas from './Rotas.js'
+import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
-function App() {
+function App() 
+{
   return (
-    <div className="App">
-      <header className="App-header">
-        <Botoes nome='/play' />
-      
-      </header>
-    </div>
+      <BrowserRouter>
+          <Rotas/>
+      </BrowserRouter>
   );
 }
 
