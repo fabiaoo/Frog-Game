@@ -3,33 +3,47 @@ import bk from '../../../src/res/circuitoBg.png'
 import sapo1 from '../../../src/res/sapo1.png';
 import './CircuitoStyle.css';
 
-const apiURL = 'https://localhost:5000/api/circuito';
+const apiURL = 'http://localhost:5000/api/pergunta';
+const apiURL2 = 'http://localhost:5000/api/resposta';
 
 const stateInicial = 
 {
-    pergunta: { id:0, conteudo:'', url_Img:''},
-    dadosPergunta: [],
+    pergunta: { id:0, conteudo:'', url_Img:true},
+    dadosPerguntas: [],
     resposta: { id: 0, resp: '', IdPergunta: '', correta:''},
-    dadosResposta: [],
+    dadosRespostas: [],
+    indexPergunta: 0,
+    indexResposta: 0
 }
 
-function selectPergunta(id) {
-    if(id > 0 && id < 6)
-        return id;
-}
-export default class CadastroAluno extends Component
+export default class Circuito extends Component
 {
     state = {...stateInicial};
     
+    componentDidUpdate() {
+        
+    }
+
     componentDidMount() {
         fetch(apiURL)
             .then(res => res.json())
             .then(
                 (result) => {
                     this.setState({
-                    dadosPergunta: result
+                            dadosPerguntas: result
                 });
-                console.log("Função didMount:" + result);
+            },
+            (error) => {
+                this.setState({ error });
+            }
+        )
+        fetch(apiURL2)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                    dadosRespostas: result
+                });
             },
             (error) => {
                 this.setState({ error });
@@ -37,10 +51,18 @@ export default class CadastroAluno extends Component
         )
     }
 
-    getPerguntas() 
+    conferir()
     {
-        const pergunta = this.state.dadosPerguntas.filter(selectPergunta);
-        console.log(pergunta);
+        this.state.dadosRespostas.map(
+            (resposta, index) => {
+                if(index == this.state.indexResposta)
+                {
+                    return pergunta.conteudo;
+                }
+
+                return "";
+            }
+        )
     }
 
     render() 
@@ -48,17 +70,36 @@ export default class CadastroAluno extends Component
         return (
             <div style = {{backgroundColor: '#AFD5F3'}}>
                 <div className="quest">
-                    2=2
-                </div>
+                {
+                    <div>
+                        <p>{this.state.dadosPerguntas.map(
+                            (pergunta, index) => {
+                                if(index == this.state.indexPergunta)
+                                {
+                                    return pergunta.conteudo;
+                                }
 
+                                return "";
+                            }
+                            )}
+                        </p>                                        
+                    </div>
+                }
+                </div>
+                
                 <div style = {{backgroundImage : 'url(./circuitoBg.png)'}} />
 
                 <div className="container">
                     <img img src={sapo1} className="imgBg"/><img img src={bk} className="imgBg2" widt="540" height="724"/>
                 </div>
 
-                <input type="number" placeholder="Resposta" className="resposta"/>
+                <input type="number" placeholder="Resposta" className="resposta" />
 
+                <button className="btnSalvar"
+                onClick={e => this.conferir(e)} 
+                >
+                    Enviar
+                </button>
             </div>
         )
     }

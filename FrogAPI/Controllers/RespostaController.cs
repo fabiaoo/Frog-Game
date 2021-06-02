@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using FrogAPI.Data;
 using FrogAPI.Models;
 
-namespace FrogAPI
+namespace FrogAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

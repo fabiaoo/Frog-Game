@@ -15,7 +15,7 @@
 }
 .resposta {
     bottom: 580px;
-    left: 650px;
+    left: 620px;
     position: absolute;
 
 }
@@ -33,3 +33,47 @@
     margin-right: auto;
     display: inline-block;
 }
+
+.btnSalvar{
+    background-color:#FFCB65;
+    bottom: 579px;
+    left: 760px;
+    font-family: 'Montserrat', sans-serif;
+    border: 2px solid #FFCB65;
+    border-radius: 0.6em;
+    position: absolute;
+    -webkit-transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+    transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+
+    box-sizing: border-box;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+
+          cursor: pointer;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+
+  margin: 1px;
+  padding: 0.7em 0.2em;
+  text-decoration: none;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  
+}
+.btnSalvar:hover {
+    box-shadow: 0 0 40px 40px #2ecc71 inset;
+  }
+
+.resposta{
+    border: 2px solid #FFCB65;
+    left: 650px;
+    border-radius: 0.6em;
+    font-size: 1rem;
+    font-weight: 5;
+    width: 100px;
+    line-height: 2;
+}
+  
