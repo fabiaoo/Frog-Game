@@ -16,7 +16,6 @@ const stateInicial =
     indexResposta: 0,
     divImg: false,
     img1: sapo1,
-    img2: sapo2,
 }
 
 export default class Circuito extends Component
@@ -76,6 +75,10 @@ export default class Circuito extends Component
 
                         this.limpar();
                     }
+                    else {
+                        console.log("Que pena! Tente novamente");
+                        this.state.divImg = false;
+                    }
                 }
                 this.setState({ indexResposta: this.state.indexResposta + 1 });  
                 return;
@@ -92,9 +95,12 @@ export default class Circuito extends Component
     {
         if(this.state.divImg == true)
         {
-            console.log(this.state.div);
+            console.log(this.state.divImg);
+            this.state.img1 = sapo2;
+        }
+        else
+        {
             this.state.img1 = sapo1;
-            this.state.img2 = sapo2;
         }
     }
 
@@ -132,10 +138,8 @@ export default class Circuito extends Component
                 {
                     this.divSituacao()
                 }
-                    <img img src={this.state.img1} className="imgBg"/><img img src={this.state.img2} className="imgBg2" widt="540" height="724"/>
-                    {
-                        this.state.divImg = false
-                    }
+                    <img img src={this.state.img1} className="imgBg"/>
+
                 </div>
 
                 <input
