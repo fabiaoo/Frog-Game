@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import bk from '../../../src/res/circuitoBg.png'
-import sapo1 from '../../../src/res/sapo1.png';
+import sapo1 from '../../../src/res/sapoesquerda.png'
+import sapo2 from '../../../src/res/sapodireita.png';
 import './CircuitoStyle.css';
 
 const apiURL = 'http://localhost:5000/api/pergunta';
@@ -13,16 +13,15 @@ const stateInicial =
     resposta: { id: 0, resp: '', IdPergunta: '', correta:''},
     dadosRespostas: [],
     indexPergunta: 0,
-    indexResposta: 0
+    indexResposta: 0,
+    divImg: false,
+    img1: sapo1,
+    img2: sapo2,
 }
 
 export default class Circuito extends Component
 {
     state = {...stateInicial};
-    
-    componentDidUpdate() {
-        
-    }
 
     componentDidMount() {
         fetch(apiURL)
@@ -30,7 +29,7 @@ export default class Circuito extends Component
             .then(
                 (result) => {
                     this.setState({
-                            dadosPerguntas: result
+                        dadosPerguntas: result
                 });
             },
             (error) => {
@@ -42,7 +41,7 @@ export default class Circuito extends Component
             .then(
                 (result) => {
                     this.setState({
-                    dadosRespostas: result
+                        dadosRespostas: result
                 });
             },
             (error) => {
@@ -51,18 +50,59 @@ export default class Circuito extends Component
         )
     }
 
+    atualizaCampo(event) {
+        //console.log(event.target.value);
+        const resposta = {...this.state.resposta};
+        resposta[event.target.name] = event.target.value;
+        this.setState({ resposta });
+    }
+
     conferir()
     {
+        var resposta = this.state.resposta;
+        resposta = resposta.resp;
+        console.log(resposta);     
+
         this.state.dadosRespostas.map(
             (resposta, index) => {
                 if(index == this.state.indexResposta)
                 {
-                    return pergunta.conteudo;
-                }
+                    if(resposta.resp === this.state.resposta.resp)
+                    {
+                        this.state.divImg = true;
+                        console.log(this.state.divImg);
+                        console.log("Parabéns! Resposta certa: " + resposta.resp);
+                        this.state.indexPergunta = this.state.indexPergunta + 1;
 
-                return "";
+                        this.limpar();
+                    }
+                }
+                this.setState({ indexResposta: this.state.indexResposta + 1 });  
+                return;
             }
         )
+    }
+
+    limpar()
+    {
+        this.setState({resposta: stateInicial.resposta});
+    }
+
+    divSituacao()
+    {
+        if(this.state.divImg == true)
+        {
+            console.log(this.state.div);
+            this.state.img1 = sapo1;
+            this.state.img2 = sapo2;
+        }
+    }
+
+    handleChange(event)
+    {
+        const resposta = { ...this.state.resposta };
+        resposta[event.target.name] = event.target.value;
+        this.setState({ resposta });
     }
 
     render() 
@@ -78,7 +118,6 @@ export default class Circuito extends Component
                                 {
                                     return pergunta.conteudo;
                                 }
-
                                 return "";
                             }
                             )}
@@ -90,14 +129,26 @@ export default class Circuito extends Component
                 <div style = {{backgroundImage : 'url(./circuitoBg.png)'}} />
 
                 <div className="container">
-                    <img img src={sapo1} className="imgBg"/><img img src={bk} className="imgBg2" widt="540" height="724"/>
+                {
+                    this.divSituacao()
+                }
+                    <img img src={this.state.img1} className="imgBg"/><img img src={this.state.img2} className="imgBg2" widt="540" height="724"/>
+                    {
+                        this.state.divImg = false
+                    }
                 </div>
 
-                <input type="number" placeholder="Resposta" className="resposta" />
+                <input
+                type="number" 
+                id="resp"
+                placeholder="Resposta" 
+                className="resposta" 
+                name="resp"
+                onChange={ e => this.handleChange(e)}
+                value={this.state.resposta.resp}
+                />
 
-                <button className="btnSalvar"
-                onClick={e => this.conferir(e)} 
-                >
+                <button className="btnSalvar" onClick={ e => this.conferir(e) }>
                     Enviar
                 </button>
             </div>
