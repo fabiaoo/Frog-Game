@@ -9,11 +9,14 @@ const apiURL2 = 'http://localhost:5000/api/resposta';
 const stateInicial = 
 {
     pergunta: { id:0, conteudo:'', url_Img:true},
-    dadosPerguntas: [],
+    dadosPerguntas: [{
+        id: 0,
+        conteudo: "",
+        url_Img: "",
+        }],
     resposta: { id: 0, resp: '', IdPergunta: '', correta:''},
     dadosRespostas: [],
-    indexPergunta: 0,
-    indexResposta: 0,
+    index: 0,
     divImg: false,
     img1: sapo1,
 }
@@ -59,31 +62,22 @@ export default class Circuito extends Component
     conferir()
     {
         var resposta = this.state.resposta;
-        resposta = resposta.resp;
-        console.log(resposta);     
+        resposta = Number(resposta.resp);
 
-        this.state.dadosRespostas.map(
-            (resposta, index) => {
-                if(index == this.state.indexResposta)
-                {
-                    if(resposta.resp === this.state.resposta.resp)
-                    {
-                        this.state.divImg = true;
-                        console.log(this.state.divImg);
-                        console.log("Parabéns! Resposta certa: " + resposta.resp);
-                        this.state.indexPergunta = this.state.indexPergunta + 1;
-
-                        this.limpar();
-                    }
-                    else {
-                        console.log("Que pena! Tente novamente");
-                        this.state.divImg = false;
-                    }
-                }
-                this.setState({ indexResposta: this.state.indexResposta + 1 });  
-                return;
-            }
-        )
+        console.log(this.state.dadosRespostas[this.state.index].resp);
+        console.log(this.state.dadosPerguntas[this.state.index].conteudo);
+        console.log(resposta);
+        if(resposta == this.state.dadosRespostas[this.state.index].resp)
+        {
+            this.divSituacao();
+            this.setState({ index: this.state.index + 1 });
+            this.setState({ divImg: !this.state.divImg});
+            this.limpar();
+        }
+        else 
+        {
+            console.log("Que pena! Tente novamente");
+        }
     }
 
     limpar()
@@ -93,16 +87,11 @@ export default class Circuito extends Component
 
     divSituacao()
     {
-        if(this.state.divImg == true)
-        {
-            console.log(this.state.divImg);
-            this.state.img1 = sapo2;
-        }
+        if(this.state.divImg)
+            this.setState({ img1: sapo1 });
         else
-        {
-            this.state.img1 = sapo1;
-        }
-    }
+            this.setState({ img1: sapo2 });   
+     }
 
     handleChange(event)
     {
@@ -116,30 +105,16 @@ export default class Circuito extends Component
         return (
             <div style = {{backgroundColor: '#AFD5F3'}}>
                 <div className="quest">
-                {
                     <div>
-                        <p>{this.state.dadosPerguntas.map(
-                            (pergunta, index) => {
-                                if(index == this.state.indexPergunta)
-                                {
-                                    return pergunta.conteudo;
-                                }
-                                return "";
-                            }
-                            )}
-                        </p>                                        
+                        <p> {this.state.dadosPerguntas[this.state.index].conteudo}</p>                                        
                     </div>
-                }
+
                 </div>
                 
                 <div style = {{backgroundImage : 'url(./circuitoBg.png)'}} />
 
                 <div className="container">
-                {
-                    this.divSituacao()
-                }
                     <img img src={this.state.img1} className="imgBg"/>
-
                 </div>
 
                 <input
